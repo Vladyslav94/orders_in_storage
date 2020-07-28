@@ -1,2 +1,6 @@
-# orders_in_storage
-Create a rest controller for creating orders in storage (any storage can be used). The order has three fields: price, quantity, item (please chose any three). The order is valid for 10 minutes (not valid orders can be deleted). Create another rest controller which will return the requested item at the lowest price (the number of items must be reduced in storage). If there are not enough items, return all available. Requirements  Please write code using Java 11 and Spring Boot, also create tests to cover the main logic. You can upload the source code on any public repository  Expected Result  Bugs free source code with the full-implemented requirements
+1. Clone the project to your local IDEA using git clone https://github.com/Vladyslav94/orders_in_storage.git
+2. Create SQL connection (using name and password from .properties file or setting your own) and DB order_storage
+3. Run the App.
+4. Use endpoint /orders/create?price=price&quantity=quantity&item=itemName to create an item
+5. Use endpoint /orders/getAllOrders?item=itemName to get the list of item by the lowest price (default restricted by 10 items)
+6. To set custom restriction use endpoint /orders/getAllOrders?item=itemName&pageNo=pageNumber&pageSize=numberOfItemsToBeDisplayed
