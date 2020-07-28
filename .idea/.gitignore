@@ -1,0 +1,3 @@
+*.xml
+!pom.xml
+*/target/**
