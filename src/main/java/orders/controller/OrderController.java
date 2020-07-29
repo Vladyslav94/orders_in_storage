@@ -20,14 +20,12 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    private static final long CURRENT_TIME = System.currentTimeMillis() / 1000L;
-
     @RequestMapping("/create")
     public String createOrder(@RequestParam(value = "price") double price,
                               @RequestParam(value = "quantity") int quantity,
                               @RequestParam(value = "item") String item) {
         checkTimeCreationAndDelete();
-        Order order = createNewOrderAndFillTheFields(price, quantity, item);
+        var order = createNewOrderAndFillTheFields(price, quantity, item);
         orderService.createOrderInStorage(order);
         return "order is created";
     }
@@ -38,20 +36,20 @@ public class OrderController {
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize) {
         checkTimeCreationAndDelete();
-        List<Order> list = orderService.getAllOrders(item, pageNo, pageSize);
+        var list = orderService.getAllOrders(item, pageNo, pageSize);
         return new ResponseEntity<>(list, new HttpHeaders(), HttpStatus.OK);
     }
 
     public void checkTimeCreationAndDelete() {
-        orderService.deleteNotValidOrders(CURRENT_TIME - 600L);
+        orderService.deleteNotValidOrders((System.currentTimeMillis() / 1000L) - 600L);
     }
 
     public Order createNewOrderAndFillTheFields(double price, int quantity, String item) {
-        Order order = new Order();
+        var order = new Order();
         order.setPrice(price);
         order.setQuantity(quantity);
         order.setItem(item);
-        order.setTimeStamp(CURRENT_TIME);
+        order.setTimeStamp(System.currentTimeMillis() / 1000L);
         return order;
     }
 }

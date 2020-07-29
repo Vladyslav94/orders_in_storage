@@ -3,9 +3,7 @@ package orders.service;
 import orders.model.Order;
 import orders.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +23,9 @@ public class OrderService {
     }
 
     public List<Order> getAllOrders(String item, Integer pageNo, Integer pageSize) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by("price").ascending());
+        var paging = PageRequest.of(pageNo, pageSize, Sort.by("price").ascending());
 
-        Page<Order> pagedResult = orderRepository.findByItem(item, paging);
+        var pagedResult = orderRepository.findByItem(item, paging);
 
         if (pagedResult.hasContent()) {
             return pagedResult.getContent();

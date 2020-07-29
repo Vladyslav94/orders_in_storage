@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -49,16 +48,16 @@ public class TestMainLogic {
 
     @Test
     public void checkReturnItem() {
-        Order firstOrder = new Order();
+        var firstOrder = new Order();
         firstOrder.setItem("Apple Watch");
         orderService.createOrderInStorage(firstOrder);
 
-        Order secondOrder = new Order();
+        var secondOrder = new Order();
         secondOrder.setItem("Samsung Galaxy Watch");
         orderService.createOrderInStorage(secondOrder);
 
-        Order firstOrderFromDB = orderRepository.findById(1).get();
-        Order secondOrderFromDB = orderRepository.findById(2).get();
+        var firstOrderFromDB = orderRepository.findById(1).get();
+        var secondOrderFromDB = orderRepository.findById(2).get();
 
         assertThat(firstOrderFromDB.getItem()).isEqualTo(firstOrder.getItem());
         assertThat(secondOrderFromDB.getItem()).isEqualTo(secondOrder.getItem());
@@ -66,40 +65,40 @@ public class TestMainLogic {
 
     @Test
     public void shouldCreateOrder() throws Exception {
-        String uri = "/orders/create?price=1&quantity=3&item=Belt";
-        Order order = new Order();
+        var uri = "/orders/create?price=1&quantity=3&item=Belt";
+        var order = new Order();
         order.setPrice(1);
         order.setQuantity(3);
         order.setItem("Belt");
 
-        String inputJson = mapToJson(order);
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(uri)
+        var inputJson = mapToJson(order);
+        var mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(uri)
                 .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
-        String content = mvcResult.getResponse().getContentAsString();
+        var content = mvcResult.getResponse().getContentAsString();
         assertEquals(content, "order is created");
     }
 
     @Test(expected = NoSuchElementException.class)
     public void deleteMoreThanTenMinutes() {
-        long TIME = System.currentTimeMillis();
-        Order order = new Order();
+        var TIME = System.currentTimeMillis();
+        var order = new Order();
         order.setTimeStamp(TIME);
         orderService.createOrderInStorage(order);
 
         TIME = TIME + 700;
-        long timeDifference = TIME - orderRepository.findById(1).get().getTimeStamp();
+        var timeDifference = TIME - orderRepository.findById(1).get().getTimeStamp();
         if (timeDifference > 600) {
             orderRepository.delete(order);
         }
 
-        Order order1 = orderRepository.findById(1).get();
+        var order1 = orderRepository.findById(1).get();
     }
 
     private String mapToJson(Object obj) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(obj);
     }
 }
